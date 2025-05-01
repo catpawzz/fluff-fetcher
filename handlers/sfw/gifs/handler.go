@@ -9,6 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/catpawzz/fluff-fetcher/utils"
 )
 
 func init() {
@@ -90,6 +92,7 @@ func SfwGifHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer file.Close()
+	utils.IncrementServedCounter()
 	w.Header().Set("Content-Type", "image/gif")
 	http.ServeContent(w, r, filepath.Base(gifPath), time.Now(), file)
 }

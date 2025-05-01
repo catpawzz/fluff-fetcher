@@ -5,10 +5,12 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"sync/atomic"
 	"time"
 
 	sfw_gif_handler "github.com/catpawzz/fluff-fetcher/handlers/sfw/gifs"
 	sfw_images_handler "github.com/catpawzz/fluff-fetcher/handlers/sfw/images"
+	"github.com/catpawzz/fluff-fetcher/utils"
 	"github.com/joho/godotenv"
 	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
@@ -16,6 +18,7 @@ import (
 
 var startTime time.Time
 var version = "2404252021"
+var servedCounter int64
 
 func isBrowserRequest(r *http.Request) bool {
 	userAgent := r.Header.Get("User-Agent")
@@ -81,14 +84,27 @@ func main() {
 			"uptime": "%s", 
 			"server_time": "%s", 
 			"server_load": "%s",
-			"memory_usage": "%s"
-		}`, version, uptime, time.Now().Format("2006-01-02 15:04:05"), serverLoad, memoryUsage)
+			"memory_usage": "%s",
+			"served_files": %d
+		}`, version, uptime, time.Now().Format("2006-01-02 15:04:05"), serverLoad, memoryUsage, utils.GetServedCount())
 	})
 	http.HandleFunc("/", rootHandler)
-	http.HandleFunc("/api/sfw/gifs/", sfw_gif_handler.SfwGifHandler) 
-	http.HandleFunc("/api/sfw/gifs", sfw_gif_handler.SfwGifHandler)  
-	http.HandleFunc("/api/sfw/images/", sfw_images_handler.SfwImageHandler) 
-	http.HandleFunc("/api/sfw/images", sfw_images_handler.SfwImageHandler) 
+	http.HandleFunc("/api/sfw/gifs/", func(w http.ResponseWriter, r *http.Request) {
+		sfw_gif_handler.SfwGifHandler(w, r)
+		IncrementServedCounter()
+	})
+	http.HandleFunc("/api/sfw/gifs", func(w http.ResponseWriter, r *http.Request) {
+		sfw_gif_handler.SfwGifHandler(w, r)
+		IncrementServedCounter()
+	})
+	http.HandleFunc("/api/sfw/images/", func(w http.ResponseWriter, r *http.Request) {
+		sfw_images_handler.SfwImageHandler(w, r)
+		IncrementServedCounter()
+	})
+	http.HandleFunc("/api/sfw/images", func(w http.ResponseWriter, r *http.Request) {
+		sfw_images_handler.SfwImageHandler(w, r)
+		IncrementServedCounter()
+	})
 	http.HandleFunc("/api/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusNotFound)
@@ -119,4 +135,8 @@ func main() {
 		fmt.Println("EXITING ✘ | Failed to start Fluff-Fetcher server:", err)
 		os.Exit(1)
 	}
+}
+
+func IncrementServedCounter() {
+	atomic.AddInt64(&servedCounter, 1)
 }

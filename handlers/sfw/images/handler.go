@@ -9,6 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/catpawzz/fluff-fetcher/utils"
 )
 
 func init() {
@@ -90,6 +92,7 @@ func SfwImageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer file.Close()
+	utils.IncrementServedCounter()
 	w.Header().Set("Content-Type", "image/jpeg")
 	http.ServeContent(w, r, filepath.Base(imagePath), time.Now(), file)
 }
