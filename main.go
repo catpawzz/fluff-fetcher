@@ -40,7 +40,7 @@ func handleBrowserRequest(w http.ResponseWriter, r *http.Request, pagePath strin
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	handleBrowserRequest(w, r, "./static/index.html")
+	handleBrowserRequest(w, r, "./static/main.html")
 }
 
 func main() {
