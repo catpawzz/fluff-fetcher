@@ -116,6 +116,10 @@
                     <span class="status-label">Memory Usage:</span>
                     <span class="status-value" id="api-memory-usage">Loading...</span>
                 </div>
+                <div class="status-item">
+                    <span class="status-label">Served files since boot:</span>
+                    <span class="status-value" id="api-served-files">Loading...</span>
+                </div>
             </div>
         </div>
         <script>
@@ -130,6 +134,7 @@
                     document.getElementById('api-server-time').textContent = data.server_time;
                     document.getElementById('api-server-load').textContent = data.server_load;
                     document.getElementById('api-memory-usage').textContent = data.memory_usage;
+                    document.getElementById('api-served-files').textContent = data.served_files;
                 } catch (error) {
                     console.error('Error fetching status:', error);
                     document.getElementById('api-status').textContent = 'Error loading status';
@@ -138,6 +143,7 @@
                     document.getElementById('api-server-time').textContent = 'Error loading server time';
                     document.getElementById('api-server-load').textContent = 'Error loading server load';
                     document.getElementById('api-memory-usage').textContent = 'Error loading memory usage';
+                    document.getElementById('api-served-files').textContent = 'Error loading served files';
                 }
             }
 
