@@ -11,6 +11,8 @@ import (
 
 	sfw_gif_handler "github.com/catpawzz/fluff-fetcher/handlers/sfw/gifs"
 	sfw_images_handler "github.com/catpawzz/fluff-fetcher/handlers/sfw/images"
+	truthordare_handler "github.com/catpawzz/fluff-fetcher/handlers/text/truthordare"
+	wouldyourather_handler "github.com/catpawzz/fluff-fetcher/handlers/text/wouldyourather"
 	"github.com/catpawzz/fluff-fetcher/utils"
 	"github.com/joho/godotenv"
 	"github.com/shirou/gopsutil/load"
@@ -131,6 +133,22 @@ func main() {
 	})
 	http.HandleFunc("/api/sfw/images", func(w http.ResponseWriter, r *http.Request) {
 		sfw_images_handler.SfwImageHandler(w, r)
+		IncrementServedCounter()
+	})
+	http.HandleFunc("/api/text/truthordare/", func(w http.ResponseWriter, r *http.Request) {
+		truthordare_handler.TruthOrDareHandler(w, r)
+		IncrementServedCounter()
+	})
+	http.HandleFunc("/api/text/truthordare", func(w http.ResponseWriter, r *http.Request) {
+		truthordare_handler.TruthOrDareHandler(w, r)
+		IncrementServedCounter()
+	})
+	http.HandleFunc("/api/text/wouldyourather/", func(w http.ResponseWriter, r *http.Request) {
+		wouldyourather_handler.WouldYouRatherHandler(w, r)
+		IncrementServedCounter()
+	})
+	http.HandleFunc("/api/text/wouldyourather", func(w http.ResponseWriter, r *http.Request) {
+		wouldyourather_handler.WouldYouRatherHandler(w, r)
 		IncrementServedCounter()
 	})
 	http.HandleFunc("/cdn/", cdnHandler)
