@@ -93,6 +93,11 @@ func SfwImageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 	utils.IncrementServedCounter()
+
+	// Add the file path as a header
+	relativePath := strings.TrimPrefix(imagePath, "./storage/")
+	w.Header().Set("X-File-Path", relativePath)
+
 	w.Header().Set("Content-Type", "image/jpeg")
 	http.ServeContent(w, r, filepath.Base(imagePath), time.Now(), file)
 }

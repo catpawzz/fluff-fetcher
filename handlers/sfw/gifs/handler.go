@@ -93,6 +93,11 @@ func SfwGifHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 	utils.IncrementServedCounter()
+
+	// Add the file path as a header
+	relativePath := strings.TrimPrefix(gifPath, "./storage/")
+	w.Header().Set("X-File-Path", relativePath)
+
 	w.Header().Set("Content-Type", "image/gif")
 	http.ServeContent(w, r, filepath.Base(gifPath), time.Now(), file)
 }
