@@ -84,20 +84,19 @@ func SfwGifHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, `{"handler": "/handlers/sfw/gifs","title": "Error 404","message": "Category not found or no GIFs available.", "status": "failure"}`)
 		return
 	}
-	file, err := os.Open(gifPath)
-	if err != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, `{"handler": "/handlers/sfw/gifs","title": "Error 500","message": "Failed to open GIF file.", "status": "failure"}`)
-		return
-	}
-	defer file.Close()
+
 	utils.IncrementServedCounter()
 
-	// Add the file path as a header
 	relativePath := strings.TrimPrefix(gifPath, "./storage/")
-	w.Header().Set("X-File-Path", relativePath)
+	fileName := filepath.Base(gifPath)
 
-	w.Header().Set("Content-Type", "image/gif")
-	http.ServeContent(w, r, filepath.Base(gifPath), time.Now(), file)
+	cdnBaseURL := os.Getenv("URL")
+	if cdnBaseURL == "" {
+		cdnBaseURL = "/cdn"
+	}
+	gifURL := fmt.Sprintf("%s/cdn/%s", cdnBaseURL, relativePath)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, `{"handler": "/handlers/sfw/gifs","title": "GIF URL","url": "%s", "filename": "%s", "status": "success"}`, gifURL, fileName)
 }

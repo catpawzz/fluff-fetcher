@@ -84,20 +84,19 @@ func SfwImageHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, `{"handler": "/handlers/sfw/images","title": "Error 404","message": "Category not found or no images available.", "status": "failure"}`)
 		return
 	}
-	file, err := os.Open(imagePath)
-	if err != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, `{"handler": "/handlers/sfw/images","title": "Error 500","message": "Failed to open image file.", "status": "failure"}`)
-		return
-	}
-	defer file.Close()
+
 	utils.IncrementServedCounter()
 
-	// Add the file path as a header
 	relativePath := strings.TrimPrefix(imagePath, "./storage/")
-	w.Header().Set("X-File-Path", relativePath)
+	fileName := filepath.Base(imagePath)
 
-	w.Header().Set("Content-Type", "image/jpeg")
-	http.ServeContent(w, r, filepath.Base(imagePath), time.Now(), file)
+	cdnBaseURL := os.Getenv("URL")
+	if cdnBaseURL == "" {
+		cdnBaseURL = "/cdn"
+	}
+	imageURL := fmt.Sprintf("%s/cdn/%s", cdnBaseURL, relativePath)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, `{"handler": "/handlers/sfw/images","title": "Image URL","url": "%s", "filename": "%s", "status": "success"}`, imageURL, fileName)
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync/atomic"
 	"time"
@@ -44,6 +45,33 @@ func handleBrowserRequest(w http.ResponseWriter, r *http.Request, pagePath strin
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	handleBrowserRequest(w, r, "./static/main.html")
+}
+
+func cdnHandler(w http.ResponseWriter, r *http.Request) {
+	path := strings.TrimPrefix(r.URL.Path, "/cdn/")
+	filePath := filepath.Join("./", path)
+
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, `{"handler": "cdn","title": "Error 404","message": "File not found.", "status": "failure"}`)
+		return
+	}
+
+	ext := strings.ToLower(filepath.Ext(filePath))
+	switch ext {
+	case ".jpg", ".jpeg":
+		w.Header().Set("Content-Type", "image/jpeg")
+	case ".png":
+		w.Header().Set("Content-Type", "image/png")
+	case ".gif":
+		w.Header().Set("Content-Type", "image/gif")
+	default:
+		w.Header().Set("Content-Type", "application/octet-stream")
+	}
+
+	http.ServeFile(w, r, filePath)
+	IncrementServedCounter()
 }
 
 func main() {
@@ -105,6 +133,7 @@ func main() {
 		sfw_images_handler.SfwImageHandler(w, r)
 		IncrementServedCounter()
 	})
+	http.HandleFunc("/cdn/", cdnHandler)
 	http.HandleFunc("/api/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusNotFound)
