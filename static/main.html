@@ -11,13 +11,17 @@
                 padding: 0;
                 min-height: 100vh;
             }
+            .ascii-header-parent {
+                justify-content: center;
+                display: flex;
+            }
             .ascii-header {
                 font-family: monospace;
                 white-space: pre;
-                text-align: center;
-                margin: 20px 0;
+                margin: 20px;
                 font-size: 12px;
                 line-height: 1.2;
+                display: inline-block;
                 background: linear-gradient(to bottom,
                     #d565aa 0%,     /* Light pink */
                     #e5b0cf 20%,
@@ -80,15 +84,17 @@
         </style>
     </head>
     <body>
-        <pre class="ascii-header">
+        <div class="ascii-header-parent">
+            <pre class="ascii-header">
       :::::::::: :::       :::    ::: :::::::::: :::::::::: :::::::::: :::::::::: ::::::::::: ::::::::  :::    ::: :::::::::: ::::::::: 
      :+:        :+:       :+:    :+: :+:        :+:        :+:        :+:            :+:    :+:    :+: :+:    :+: :+:        :+:    :+: 
     +:+        +:+       +:+    +:+ +:+        +:+        +:+        +:+            +:+    +:+        +:+    +:+ +:+        +:+    +:+  
    :#::+::#   +#+       +#+    +:+ :#::+::#   :#::+::#   :#::+::#   +#++:++#       +#+    +#+        +#++:++#++ +#++:++#   +#++:++#:    
   +#+        +#+       +#+    +#+ +#+        +#+        +#+        +#+            +#+    +#+        +#+    +#+ +#+        +#+    +#+    
  #+#        #+#       #+#    #+# #+#        #+#        #+#        #+#            #+#    #+#    #+# #+#    #+# #+#        #+#    #+#     
-   ###        ########## ########  ###        ###        ###        ##########     ###     ########  ###    ### ########## ###    ###          
-        </pre>
+###        ########## ########  ###        ###        ###        ##########     ###     ########  ###    ### ########## ###    ###      
+</pre>
+        </div>
         <div class="content">
             <p>Fluff-Fetch is an image api for anime images.</p>
             <div class="status-box">
