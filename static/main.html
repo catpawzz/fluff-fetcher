@@ -6,13 +6,13 @@
         <title>Fluff-Fetch</title>
         <meta property="og:title" content="Fluff-Fetch">
         <meta property="og:description" content="Multi-Function API providing easy access to images, GIFs, and text content">
-        <meta property="og:image" content="https://api.cat-space.net/cdn/favicon.png">
+        <meta property="og:image" content="https://api.cat-space.net/cdn/storage/system/favicon.png">
         <meta property="og:url" content="https://api.cat-space.net">
         <meta property="og:type" content="website">
         <meta name="twitter:site" content="@catpawzz">
         <meta name="twitter:creator" content="@catpawzz">
-        <link rel="icon" href="https://api.cat-space.net/cdn/favicon.png" type="image/x-icon">
-        <link rel="shortcut icon" href="https://api.cat-space.net/cdn/favicon.png" type="image/x-icon">
+        <link rel="icon" href="https://api.cat-space.net/cdn/storage/system/favicon.png" type="image/x-icon">
+        <link rel="shortcut icon" href="https://api.cat-space.net/cdn/storage/system/favicon.png" type="image/x-icon">
         <meta name="theme-color" content="#b4befe">
         <style>
             :root {
@@ -238,6 +238,40 @@
                 50% { opacity: 1; }
                 100% { opacity: 0.8; }
             }
+
+            ::-webkit-scrollbar {
+                width: 10px;
+                height: 10px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: var(--surface0);
+                border-radius: 5px;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: var(--surface2);
+                border-radius: 5px;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: var(--lavender);
+            }
+
+            * {
+                scrollbar-width: thin;
+                scrollbar-color: var(--surface2) var(--surface0);
+            }
+            
+            ::selection {
+                background-color: rgba(180, 190, 254, 0.7);
+                color: var(--base);
+            }
+            
+            ::-moz-selection {
+                background-color: rgba(180, 190, 254, 0.7);
+                color: var(--base);
+            }
         </style>
     </head>
     <body>
@@ -312,10 +346,10 @@
                 <div class="footer-links">
                     <a href="https://github.com/catpawzz/fluff-fetcher" target="_blank">GitHub</a>
                     <a href="/documentation" target="_blank">API Documentation</a>
-                    <a href="/status" target="_blank">Status Dashboard</a>
+                    <a href="/status" target="_blank">API status</a>
                 </div>
                 <div class="footer-copyright">
-                    &copy; <span id="current-year"></span> @catpawzz and @Snupai
+                    &copy; <span id="current-year"></span> <a href="https://github.com/catpawzz" target="_blank">@catpawzz</a> and <a href="https://github.com/Snupai" target="_blank">@Snupai</a>
                 </div>
             </div>
         </footer>

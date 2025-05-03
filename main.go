@@ -50,6 +50,10 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	handleBrowserRequest(w, r, "./static/main.html")
 }
 
+func documentationHandler(w http.ResponseWriter, r *http.Request) {
+	handleBrowserRequest(w, r, "./static/documentation.html")
+}
+
 func cdnHandler(w http.ResponseWriter, r *http.Request) {
 	path := strings.TrimPrefix(r.URL.Path, "/cdn/")
 	filePath := filepath.Join("./", path)
@@ -120,6 +124,7 @@ func main() {
 		}`, version, uptime, time.Now().Format("2006-01-02 15:04:05"), serverLoad, memoryUsage, utils.GetServedCount())
 	})
 	http.HandleFunc("/", rootHandler)
+	http.HandleFunc("/documentation", documentationHandler)
 	http.HandleFunc("/api/sfw/gifs/", func(w http.ResponseWriter, r *http.Request) {
 		sfw_gif_handler.SfwGifHandler(w, r)
 		IncrementServedCounter()

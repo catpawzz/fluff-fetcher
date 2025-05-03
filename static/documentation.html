@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Fluff-Fetch API Documentation</title>
+        <meta property="og:title" content="Fluff-Fetch API Documentation">
+        <meta property="og:description" content="Documentation for the Fluff-Fetch API - Access images, GIFs, and text content">
+        <meta property="og:image" content="https://api.cat-space.net/cdn/storage/system/favicon.png">
+        <meta property="og:url" content="https://api.cat-space.net">
+        <meta property="og:type" content="website">
+        <meta name="twitter:site" content="@catpawzz">
+        <meta name="twitter:creator" content="@catpawzz">
+        <link rel="icon" href="https://api.cat-space.net/cdn/storage/system/favicon.png" type="image/x-icon">
+        <link rel="shortcut icon" href="https://api.cat-space.net/cdn/storage/system/favicon.png" type="image/x-icon">
+        <meta name="theme-color" content="#b4befe">
+        <style>
+            :root {
+                --base: #1e1e2e;
+                --text: #cdd6f4;
+                --subtext: #a6adc8;
+                --surface0: #313244;
+                --surface1: #45475a;
+                --surface2: #585b70;
+                --blue: #89b4fa;
+                --lavender: #b4befe;
+                --green: #a6e3a1;
+                --pink: #d565aa;
+                --light-pink: #e5b0cf;
+                --blue-light: #5cd0f8;
+                --red: #f38ba8;
+                --yellow: #f9e2af;
+            }
+            
+            body {
+                background-color: var(--base);
+                color: var(--text);
+                font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+                margin: 0;
+                padding: 0;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .ascii-header-parent {
+                justify-content: center;
+                display: flex;
+                margin: 1rem 0;
+            }
+            
+            .ascii-header {
+                font-family: monospace;
+                white-space: pre;
+                margin: 20px;
+                font-size: 12px;
+                line-height: 1.2;
+                display: inline-block;
+                font-weight: 800;
+                background: linear-gradient(to bottom,
+                    var(--pink) 0%,
+                    var(--light-pink) 20%,
+                    #FFFFFF 20%,
+                    #FFFFFF 42%,
+                    var(--blue-light) 42%,
+                    var(--blue-light) 58%,
+                    #FFFFFF 58%,
+                    #FFFFFF 80%,
+                    var(--light-pink) 80%,
+                    var(--pink) 100%
+                );
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent;
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            }
+            
+            .main-container {
+                flex: 1;
+                padding: 30px 0;
+                display: flex;
+                flex-direction: column;
+                max-width: 1600px;
+                margin: 0 auto;
+                width: 100%;
+            }
+            
+            .docs-header {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            
+            .docs-header h1 {
+                color: var(--blue);
+                font-size: 2.5rem;
+                margin-bottom: 10px;
+            }
+            
+            .docs-header p {
+                color: var(--subtext);
+                font-size: 1.2rem;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            
+            .docs-layout {
+                display: flex;
+                gap: 30px;
+                padding: 0 20px;
+            }
+            
+            .sidebar {
+                width: 250px;
+                position: sticky;
+                top: 30px;
+                align-self: flex-start;
+                background-color: var(--surface0);
+                border-radius: 16px;
+                padding: 20px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                max-height: calc(100vh - 100px);
+                overflow-y: auto;
+            }
+            
+            .sidebar-title {
+                font-size: 1.2rem;
+                color: var(--lavender);
+                margin: 0 0 15px 0;
+                padding-bottom: 10px;
+                border-bottom: 1px solid var(--surface1);
+            }
+            
+            .nav-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .nav-group {
+                margin-bottom: 15px;
+            }
+            
+            .nav-group-title {
+                font-weight: 600;
+                color: var(--blue);
+                margin: 10px 0;
+                display: block;
+                font-size: 0.95rem;
+            }
+            
+            .nav-link {
+                display: block;
+                padding: 8px 10px;
+                margin: 4px 0;
+                color: var(--text);
+                text-decoration: none;
+                font-size: 0.9rem;
+                border-radius: 8px;
+                transition: all 0.2s;
+            }
+            
+            .nav-link:hover, .nav-link.active {
+                background-color: var(--surface1);
+                color: var(--blue);
+            }
+            
+            .docs-content {
+                flex: 1;
+                max-width: 1200px;
+            }
+            
+            .endpoint-card {
+                background-color: var(--surface0);
+                border-radius: 16px;
+                padding: 25px;
+                margin-bottom: 30px;
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            }
+            
+            .endpoint-header {
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .endpoint-title {
+                font-size: 1.5rem;
+                color: var(--blue);
+                margin: 0;
+                flex: 1;
+            }
+            
+            .endpoint-url {
+                display: flex;
+                align-items: center;
+                margin: 15px 0;
+                background-color: var(--surface1);
+                border-radius: 8px;
+                padding: 12px 15px;
+                overflow-x: auto;
+            }
+            
+            .method {
+                display: inline-block;
+                padding: 5px 10px;
+                border-radius: 6px;
+                font-weight: bold;
+                margin-right: 12px;
+                min-width: 50px;
+                text-align: center;
+                font-size: 0.9rem;
+            }
+            
+            .method.get {
+                background-color: var(--green);
+                color: var(--base);
+            }
+            
+            .method.post {
+                background-color: var(--blue);
+                color: var (--base);
+            }
+            
+            .method.delete {
+                background-color: var(--red);
+                color: var(--base);
+            }
+            
+            .method.put {
+                background-color: var (--yellow);
+                color: var(--base);
+            }
+            
+            .endpoint-path {
+                font-family: 'Consolas', monospace;
+                font-weight: 500;
+            }
+            
+            .endpoint-description {
+                color: var(--text);
+                font-size: 1.1rem;
+                line-height: 1.6;
+                margin: 15px 0 25px 0;
+            }
+            
+            .parameter-table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+                margin: 20px 0;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+            
+            .parameter-table th, .parameter-table td {
+                padding: 12px 15px;
+                text-align: left;
+            }
+            
+            .parameter-table th {
+                background-color: var(--surface1);
+                color: var(--blue);
+                font-weight: 600;
+            }
+            
+            .parameter-table tr:nth-child(odd) td {
+                background-color: rgba(0, 0, 0, 0.1);
+            }
+            
+            .parameter-table tr:hover td {
+                background-color: rgba(137, 180, 250, 0.1);
+            }
+            
+            .parameter-required {
+                display: inline-block;
+                background-color: var(--surface2);
+                color: var(--text);
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-size: 0.8rem;
+                margin-left: 5px;
+            }
+            
+            .parameter-required.yes {
+                background-color: var(--pink);
+                color: var(--base);
+            }
+            
+            .parameter-required.no {
+                background-color: var(--surface2);
+            }
+            
+            .section-title {
+                color: var(--lavender);
+                font-size: 1.2rem;
+                margin: 30px 0 15px 0;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                border-bottom: 1px solid var(--surface1);
+                padding-bottom: 8px;
+            }
+            
+            .section-title::before {
+                content: '';
+                display: inline-block;
+                width: 5px;
+                height: 18px;
+                background-color: var(--lavender);
+                margin-right: 10px;
+                border-radius: 2px;
+            }
+            
+            .example-container {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            @media (min-width: 1024px) {
+                .example-container {
+                    flex-direction: row;
+                }
+                
+                .example-column {
+                    flex: 1;
+                }
+            }
+            
+            .example-column {
+                background-color: var(--surface1);
+                border-radius: 8px;
+                padding: 15px;
+                width: 100%;
+                overflow: hidden;
+            }
+            
+            .example-label {
+                font-size: 0.9rem;
+                color: var(--green);
+                margin: 0 0 10px 0;
+                font-weight: 600;
+            }
+            
+            .code-block {
+                background-color: var(--base);
+                border-radius: 8px;
+                padding: 15px;
+                margin: 0;
+                font-family: 'Consolas', monospace;
+                font-size: 14px;
+                overflow-x: auto;
+                white-space: pre;
+                line-height: 1.5;
+                position: relative;
+                border: 1px solid var(--surface2);
+                max-width: 100%;
+                word-wrap: normal;
+            }
+            
+            .code-json {
+                color: var(--text);
+            }
+            
+            .code-json .key {
+                color: var(--lavender);
+            }
+            
+            .code-json .string {
+                color: var(--green);
+            }
+            
+            .code-json .number {
+                color: var(--blue-light);
+            }
+            
+            .code-json .boolean {
+                color: var(--pink);
+            }
+            
+            .copy-button {
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                background-color: var(--surface2);
+                color: var(--text);
+                border: none;
+                border-radius: 4px;
+                padding: 5px 10px;
+                font-size: 0.8rem;
+                cursor: pointer;
+                opacity: 0.7;
+                transition: opacity 0.2s, background-color 0.2s;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                z-index: 10;
+            }
+            
+            .copy-button:hover {
+                opacity: 1;
+                background-color: var(--blue);
+                color: var(--base);
+            }
+            
+            .code-block:hover .copy-button {
+                opacity: 0.9;
+            }
+            
+            .copy-icon {
+                width: 14px;
+                height: 14px;
+                flex-shrink: 0;
+            }
+            
+            .response-example {
+                margin-top: 0;
+            }
+            
+            .error-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 15px;
+                margin: 20px 0;
+            }
+            
+            .error-card {
+                background-color: var(--surface1);
+                border-radius: 8px;
+                padding: 15px;
+                border-left: 4px solid;
+            }
+            
+            .error-card.error-400 { border-color: var(--yellow); }
+            .error-card.error-404 { border-color: var(--blue); }
+            .error-card.error-429 { border-color: var(--orange, #fab387); }
+            .error-card.error-500 { border-color: var(--red); }
+            
+            .error-code {
+                font-family: 'Consolas', monospace;
+                font-size: 1.2rem;
+                margin: 0 0 8px 0;
+            }
+            
+            .error-description {
+                font-size: 0.9rem;
+                margin: 0;
+                color: var(--subtext);
+            }
+            
+            .badge {
+                display: inline-block;
+                padding: 3px 8px;
+                border-radius: 12px;
+                font-size: 0.8rem;
+                margin-left: 8px;
+                background-color: var(--surface1);
+            }
+            
+            .section-divider {
+                height: 1px;
+                background-color: var(--surface1);
+                margin: 30px 0;
+            }
+            
+            @media (max-width: 1024px) {
+                .docs-layout {
+                    flex-direction: column;
+                }
+                
+                .sidebar {
+                    width: 100%;
+                    position: static;
+                    margin-bottom: 20px;
+                }
+            }
+            
+            @media (max-width: 768px) {
+                .content-grid {
+                    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                    gap: 20px;
+                    padding: 0 15px;
+                }
+                
+                .content {
+                    padding: 20px;
+                }
+                
+                .ascii-header {
+                    font-size: 8px;
+                    margin: 10px;
+                }
+                
+                .endpoint-url {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                
+                .method {
+                    margin-bottom: 10px;
+                }
+            }
+            
+            @media (max-width: 480px) {
+                .content-grid {
+                    grid-template-columns: 1fr;
+                }
+                
+                .error-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+            
+            .footer {
+                background-color: #181825;
+                color: var(--subtext);
+                text-align: center;
+                padding: 30px 0;
+                margin-top: 30px;
+                border-top: 1px solid var(--surface0);
+            }
+            
+            .footer-content {
+                max-width: 800px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .footer-links {
+                display: flex;
+                justify-content: center;
+                gap: 30px;
+                flex-wrap: wrap;
+            }
+            
+            .footer a {
+                color: var(--blue);
+                text-decoration: none;
+                transition: all 0.3s ease;
+                padding: 5px 12px;
+                border-radius: 6px;
+            }
+            
+            .footer a:hover {
+                color: var(--lavender);
+                background-color: rgba(180, 190, 254, 0.1);
+                transform: translateY(-2px);
+            }
+            
+            .footer-copyright {
+                font-size: 14px;
+                margin-top: 15px;
+            }
+            
+            .pulse {
+                animation: pulse 2s infinite;
+            }
+            
+            @keyframes pulse {
+                0% { opacity: 0.8; }
+                50% { opacity: 1; }
+                100% { opacity: 0.8; }
+            }
+            
+            ::-webkit-scrollbar {
+                width: 10px;
+                height: 10px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: var(--surface0);
+                border-radius: 5px;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: var(--surface2);
+                border-radius: 5px;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: var(--lavender);
+            }
+
+            * {
+                scrollbar-width: thin;
+                scrollbar-color: var(--surface2) var(--surface0);
+            }
+        
+            ::selection {
+                background-color: rgba(180, 190, 254, 0.7);
+                color: var(--base);
+            }
+            
+            ::-moz-selection {
+                background-color: rgba(180, 190, 254, 0.7);
+                color: var(--base);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="main-container">
+            <div class="ascii-header-parent">
+                <pre class="ascii-header">
+      :::::::::: :::       :::    ::: :::::::::: :::::::::: :::::::::: :::::::::: ::::::::::: ::::::::  :::    ::: :::::::::: ::::::::: 
+     :+:        :+:       :+:    :+: :+:        :+:        :+:        :+:            :+:    :+:    :+: :+:    :+: :+:        :+:    :+: 
+    +:+        +:+       +:+    +:+ +:+        +:+        +:+        +:+            +:+    +:+    +:+ +:+    +:+ +:+        +:+    +:+  
+   :#::+::#   +#+       +#+    +:+ :#::+::#   :#::+::#   :#::+::#   +#++:++#       +#+    +#+        +#++:++#++ +#++:++#   +#++:++#:    
+  +#+        +#+       +#+    +#+ +#+        +#+        +#+        +#+            +#+    +#+        +#+    +#+ +#+        +#+    +#+    
+ #+#        #+#       #+#    #+# #+#        #+#        #+#        #+#            #+#    #+#    #+# #+#    #+# #+#        #+#    #+#     
+###        ########## ########  ###        ###        ###        ##########     ###     ########  ###    ### ########## ###    ###      
+</pre>
+            </div>
+            
+            <div class="docs-header">
+                <h1>Fluff-Fetcher API Documentation</h1>
+                <p>Comprehensive guide to integrating with our multi-function API for images, GIFs, and text content</p>
+            </div>
+            
+            <div class="docs-layout">
+                <div class="sidebar">
+                    <h2 class="sidebar-title">Documentation</h2>
+                    <nav>
+                        <ul class="nav-list">
+                            <li class="nav-group">
+                                <span class="nav-group-title">Getting Started</span>
+                                <a href="#overview" class="nav-link">Overview</a>
+                                <a href="#rate-limits" class="nav-link">Rate Limits</a>
+                            </li>
+                            <li class="nav-group">
+                                <span class="nav-group-title">SFW Endpoints</span>
+                                <a href="#sfw-gifs" class="nav-link">GIFs</a>
+                            </li>
+                            <li class="nav-group">
+                                <span class="nav-group-title">Text Endpoints</span>
+                                <a href="#text-jokes" class="nav-link">Jokes</a>
+                                <a href="#text-truthordare" class="nav-link">Truth or Dare</a>
+                                <a href="#text-wouldyourather" class="nav-link">Would You Rather</a>
+                            </li>
+                            <li class="nav-group">
+                                <span class="nav-group-title">Resources</span>
+                                <a href="#error-handling" class="nav-link">Error Handling</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                
+                <div class="docs-content">
+                    <div class="endpoint-card" id="overview">
+                        <h2 class="endpoint-title">Overview</h2>
+                        <p class="endpoint-description">Welcome to the Fluff-Fetcher API documentation. This API provides easy access to images, GIFs, and text content for your applications.</p>
+                        
+                        <div class="section-title">Base URL</div>
+                        <div class="code-block">https://api.cat-space.net/api</div>
+                        
+                        <p class="endpoint-description">All API responses are returned in JSON format unless otherwise specified.</p>
+                    </div>
+                    
+                    <div class="endpoint-card" id="rate-limits">
+                        <h2 class="endpoint-title">Rate Limits</h2>
+                        <p class="endpoint-description">To ensure service stability and availability for all users, the API implements the following rate limits:</p>
+                        
+                        <div class="parameter-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Scope</th>
+                                        <th>Limit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Per Minute</td>
+                                        <td>100 requests per IP address</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Per Hour</td>
+                                        <td>1,000 requests per IP address</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <p class="endpoint-description">If you exceed these limits, you'll receive a 429 Too Many Requests response.</p>
+                    </div>
+                    
+                    <div class="section-divider"></div>
+                    
+                    <div class="endpoint-card" id="sfw-gifs">
+                        <div class="endpoint-header">
+                            <h2 class="endpoint-title">GIFs Endpoint</h2>
+                            <span class="badge">SFW</span>
+                        </div>
+                        
+                        <div class="endpoint-url">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-path">/api/sfw/gifs/{category}</span>
+                        </div>
+                        
+                        <p class="endpoint-description">Returns a random SFW GIF from the specified category.</p>
+                        
+                        <div class="section-title">Parameters</div>
+                        <div class="parameter-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>category</td>
+                                        <td>string</td>
+                                        <td><span class="parameter-required no">No</span></td>
+                                        <td>Filter GIFs by category (e.g., 'hug', 'pat', 'cry', ...)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="section-title">Example</div>
+                        <div class="example-container">
+                            <div class="example-column">
+                                <div class="example-label">Request</div>
+                                <div class="code-block">fetch('https://api.cat-space.net/api/sfw/gifs/hug')
+  .then(response => response.json())
+  .then(data => console.log(data));</div>
+                            </div>
+                            
+                            <div class="example-column">
+                                <div class="example-label">Response</div>
+                                <div class="code-block response-example">{
+  "handler": "/handlers/sfw/gifs",
+  "title": "GIF URL",
+  "url": "https://api.cat-space.net/cdn/storage/sfw/gifs/hug/039.gif",
+  "filename": "039.gif",
+  "status": "success"
+}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-divider"></div>
+                    
+                    <div class="endpoint-card" id="text-jokes">
+                        <div class="endpoint-header">
+                            <h2 class="endpoint-title">Jokes Endpoint</h2>
+                            <span class="badge">Text</span>
+                        </div>
+                        
+                        <div class="endpoint-url">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-path">/api/text/jokes</span>
+                        </div>
+                        
+                        <p class="endpoint-description">Returns a random joke from the specified category.</p>
+                        
+                        <div class="section-title">Parameters</div>
+                        <div class="parameter-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>category</td>
+                                        <td>string</td>
+                                        <td><span class="parameter-required no">No</span></td>
+                                        <td>Filter jokes by category (e.g., 'general', 'programming', 'dad')</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="section-title">Example</div>
+                        <div class="example-container">
+                            <div class="example-column">
+                                <div class="example-label">Request</div>
+                                <div class="code-block">fetch('https://api.cat-space.net/api/text/jokes?category=programming')
+  .then(response => response.json())
+  .then(data => console.log(data));</div>
+                            </div>
+                            
+                            <div class="example-column">
+                                <div class="example-label">Response</div>
+                                <div class="code-block response-example">{
+"handler": "/handlers/text/jokes",
+"category": "programmer",
+"joke": "Real programmers count from 0.",
+"status": "success"
+}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="endpoint-card" id="text-truthordare">
+                        <div class="endpoint-header">
+                            <h2 class="endpoint-title">Truth or Dare Endpoint</h2>
+                            <span class="badge">Text</span>
+                        </div>
+                        
+                        <div class="endpoint-url">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-path">/api/text/truthordare/{type}</span>
+                        </div>
+                        
+                        <p class="endpoint-description">Returns a random truth or dare prompt based on the type parameter.</p>
+                        
+                        <div class="section-title">Parameters</div>
+                        <div class="parameter-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>type</td>
+                                        <td>string</td>
+                                        <td><span class="parameter-required no">No</span></td>
+                                        <td>Specify 'truth' or 'dare' (returns random if not specified)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="section-title">Example</div>
+                        <div class="example-container">
+                            <div class="example-column">
+                                <div class="example-label">Request</div>
+                                <div class="code-block">fetch('https://api.cat-space.net/api/text/truthordare/truth')
+  .then(response => response.json())
+  .then(data => console.log(data));</div>
+                            </div>
+                            
+                            <div class="example-column">
+                                <div class="example-label">Response</div>
+                                <div class="code-block response-example">{
+"handler": "/handlers/text/truthordare",
+"type": "truth",
+"question": "What's the most embarrassing typo you've ever made?",
+"status": "success"
+}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="endpoint-card" id="text-wouldyourather">
+                        <div class="endpoint-header">
+                            <h2 class="endpoint-title">Would You Rather Endpoint</h2>
+                            <span class="badge">Text</span>
+                        </div>
+                        
+                        <div class="endpoint-url">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-path">/api/text/wouldyourather</span>
+                        </div>
+                        
+                        <p class="endpoint-description">Returns a random "Would You Rather" question.</p>
+                        
+                        <div class="section-title">Example</div>
+                        <div class="example-container">
+                            <div class="example-column">
+                                <div class="example-label">Request</div>
+                                <div class="code-block">fetch('https://api.cat-space.net/api/text/wouldyourather')
+  .then(response => response.json())
+  .then(data => console.log(data));</div>
+                            </div>
+                            
+                            <div class="example-column">
+                                <div class="example-label">Response</div>
+                                <div class="code-block response-example">{
+  "handler": "/handlers/text/wouldyourather",
+  "question": "Would you rather have to use light mode on all apps or have every app randomly switch between light and dark mode?",
+  "status": "success"
+}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-divider"></div>
+                    
+                    <div class="endpoint-card" id="error-handling">
+                        <h2 class="endpoint-title">Error Handling</h2>
+                        <p class="endpoint-description">When an error occurs, the API will return an appropriate HTTP status code along with a JSON response containing error details.</p>
+                        
+                        <div class="section-title">Error Response Format</div>
+                        <div class="code-block">{
+  "error": true,
+  "status": 404,
+  "message": "Resource not found"
+}</div>
+                        
+                        <div class="section-title">Common Error Codes</div>
+                        <div class="error-grid">
+                            <div class="error-card error-400">
+                                <div class="error-code">400</div>
+                                <div class="error-description">Bad Request - Your request is invalid.</div>
+                            </div>
+                            
+                            <div class="error-card error-404">
+                                <div class="error-code">404</div>
+                                <div class="error-description">Not Found - The requested resource could not be found.</div>
+                            </div>
+                            
+                            <div class="error-card error-429">
+                                <div class="error-code">429</div>
+                                <div class="error-description">Too Many Requests - You've exceeded the rate limit.</div>
+                            </div>
+                            
+                            <div class="error-card error-500">
+                                <div class="error-code">500</div>
+                                <div class="error-description">Internal Server Error - Something went wrong on our end.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="https://github.com/catpawzz/fluff-fetcher" target="_blank">GitHub</a>
+                    <a href="/" target="_blank">Home</a>
+                    <a href="/status" target="_blank">API status</a>
+                </div>
+                <div class="footer-copyright">
+                    &copy; <span id="current-year"></span> <a href="https://github.com/catpawzz" target="_blank">@catpawzz</a> and <a href="https://github.com/Snupai" target="_blank">@Snupai</a>
+                </div>
+            </div>
+        </footer>
+        
+        <script>
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            document.addEventListener('DOMContentLoaded', function() {
+                const codeBlocks = document.querySelectorAll('.code-block');
+                
+                codeBlocks.forEach(block => {
+                    const content = block.textContent;
+                    
+                    const copyButton = document.createElement('button');
+                    copyButton.className = 'copy-button';
+                    copyButton.innerHTML = '<svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy';
+                    copyButton.addEventListener('click', () => {
+                        navigator.clipboard.writeText(content)
+                            .then(() => {
+                                copyButton.innerHTML = '<svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!';
+                                setTimeout(() => {
+                                    copyButton.innerHTML = '<svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy';
+                                }, 2000);
+                            })
+                            .catch(err => {
+                                console.error('Failed to copy: ', err);
+                            });
+                    });
+                    
+                    block.appendChild(copyButton);
+                    
+                    if (content.trim().startsWith('{') && content.trim().endsWith('}')) {
+                        try {
+                            JSON.parse(content);
+                            
+                            let formattedContent = content;
+                            
+                            formattedContent = formattedContent.replace(/(".*?"):/g, '<span class="key">$1</span>:');
+                            formattedContent = formattedContent.replace(/: (".*?")(,|$|\n)/g, ': <span class="string">$1</span>$2');
+                            formattedContent = formattedContent.replace(/: (true|false)(,|$|\n)/g, ': <span class="boolean">$1</span>$2');
+                            formattedContent = formattedContent.replace(/: (-?\d+\.?\d*)(,|$|\n)/g, ': <span class="number">$1</span>$2');
+                            
+                            block.innerHTML = formattedContent;
+                            block.classList.add('code-json');
+                            
+                            block.appendChild(copyButton);
+                        } catch (e) {
+                        }
+                    }
+                });
+                
+                const navLinks = document.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        navLinks.forEach(l => l.classList.remove('active'));
+                        this.classList.add('active');
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
