@@ -11,6 +11,7 @@ import (
 
 	sfw_gif_handler "github.com/catpawzz/fluff-fetcher/handlers/sfw/gifs"
 	sfw_images_handler "github.com/catpawzz/fluff-fetcher/handlers/sfw/images"
+	jokes_handler "github.com/catpawzz/fluff-fetcher/handlers/text/jokes"
 	truthordare_handler "github.com/catpawzz/fluff-fetcher/handlers/text/truthordare"
 	wouldyourather_handler "github.com/catpawzz/fluff-fetcher/handlers/text/wouldyourather"
 	"github.com/catpawzz/fluff-fetcher/utils"
@@ -149,6 +150,14 @@ func main() {
 	})
 	http.HandleFunc("/api/text/wouldyourather", func(w http.ResponseWriter, r *http.Request) {
 		wouldyourather_handler.WouldYouRatherHandler(w, r)
+		IncrementServedCounter()
+	})
+	http.HandleFunc("/api/text/jokes/", func(w http.ResponseWriter, r *http.Request) {
+		jokes_handler.JokesHandler(w, r)
+		IncrementServedCounter()
+	})
+	http.HandleFunc("/api/text/jokes", func(w http.ResponseWriter, r *http.Request) {
+		jokes_handler.JokesHandler(w, r)
 		IncrementServedCounter()
 	})
 	http.HandleFunc("/cdn/", cdnHandler)
