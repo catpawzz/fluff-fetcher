@@ -1,20 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Fluff-Fetch</title>
         <style>
+            :root {
+                --base: #1e1e2e;
+                --text: #cdd6f4;
+                --subtext: #a6adc8;
+                --surface0: #313244;
+                --surface1: #45475a;
+                --surface2: #585b70;
+                --blue: #89b4fa;
+                --lavender: #b4befe;
+                --green: #a6e3a1;
+                --pink: #d565aa;
+                --light-pink: #e5b0cf;
+                --blue-light: #5cd0f8;
+            }
+            
             body {
-                background-color: #1e1e2e; /* Base */
-                color: #cdd6f4; /* Text */
+                background-color: var(--base);
+                color: var(--text);
                 font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
                 margin: 0;
                 padding: 0;
                 min-height: 100vh;
+                display: flex;
+                flex-direction: column;
             }
+            
             .ascii-header-parent {
                 justify-content: center;
                 display: flex;
+                margin: 1rem 0;
             }
+            
             .ascii-header {
                 font-family: monospace;
                 white-space: pre;
@@ -22,113 +44,275 @@
                 font-size: 12px;
                 line-height: 1.2;
                 display: inline-block;
+                font-weight: 800;
                 background: linear-gradient(to bottom,
-                    #d565aa 0%,     /* Light pink */
-                    #e5b0cf 20%,
-                    #FFFFFF 20%,    /* White */
+                    var(--pink) 0%,
+                    var(--light-pink) 20%,
+                    #FFFFFF 20%,
                     #FFFFFF 42%,
-                    #5cd0f8 42%,    /* Light blue */
-                    #5cd0f8 58%,
-                    #FFFFFF 58%,    /* White */
+                    var(--blue-light) 42%,
+                    var(--blue-light) 58%,
+                    #FFFFFF 58%,
                     #FFFFFF 80%,
-                    #e5b0cf 80%,    /* Light pink */
-                    #d565aa 100%
+                    var(--light-pink) 80%,
+                    var(--pink) 100%
                 );
                 -webkit-background-clip: text;
                 background-clip: text;
                 color: transparent;
                 text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
             }
+            
+            .content-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 30px;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+            }
+            
             .content {
-                text-align: center;
-                margin: 40px auto;
-                max-width: 600px;
-                padding: 20px;
-                background-color: #313244; /* Surface0 */
-                border-radius: 12px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                text-align: start;
+                padding: 25px;
+                background-color: var(--surface0);
+                border-radius: 16px;
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                display: flex;
+                flex-direction: column;
             }
+            
+            .content:hover {
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            }
+            
+            .content h2 {
+                margin-top: 0;
+                margin-bottom: 20px;
+                font-weight: 600;
+                color: var(--blue);
+            }
+            
             .content p {
-                color: #cdd6f4; /* Text */
-                font-size: 16px;
+                color: var(--text);
+                font-size: 18px;
                 line-height: 1.6;
-                margin: 0;
+                margin: 0 0 20px 0;
+                font-weight: 500;
             }
+            
             .content a {
-                color: #89b4fa; /* Blue */
+                color: var(--blue);
                 text-decoration: none;
-                transition: color 0.2s ease;
+                transition: color 0.2s ease, text-shadow 0.2s ease;
             }
+            
             .content a:hover {
-                color: #b4befe; /* Lavender */
+                color: var(--lavender);
+                text-shadow: 0 0 8px rgba(180, 190, 254, 0.4);
             }
+            
             .status-box {
-                background-color: #45475a; /* Surface1 */
-                border-radius: 8px;
-                padding: 15px;
+                background-color: var(--surface1);
+                border-radius: 12px;
                 margin: 20px 0;
                 text-align: left;
+                padding-left: 18px;
+                padding-right: 18px
             }
+            
             .status-item {
-                margin: 8px 0;
+                margin: 12px 0;
                 display: flex;
                 justify-content: space-between;
+                padding-bottom: 8px;
+                border-bottom: 1px solid var(--surface2);
             }
+            
+            .status-item:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+            
             .status-label {
-                color: #a6e3a1; /* Green */
+                color: var(--green);
                 font-weight: bold;
             }
+            
             .status-value {
-                color: #cdd6f4; /* Text */
+                color: var(--text);
+                font-family: 'Consolas', monospace;
+                background-color: rgba(0, 0, 0, 0.2);
+                padding: 2px 8px;
+                border-radius: 4px;
+            }
+            
+            .main-container {
+                flex: 1;
+                padding: 30px 0;
+            }
+            
+            .footer {
+                background-color: #181825;
+                color: var(--subtext);
+                text-align: center;
+                padding: 30px 0;
+                margin-top: 30px;
+                border-top: 1px solid var(--surface0);
+            }
+            
+            .footer-content {
+                max-width: 800px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .footer-links {
+                display: flex;
+                justify-content: center;
+                gap: 30px;
+                flex-wrap: wrap;
+            }
+            
+            .footer a {
+                color: var(--blue);
+                text-decoration: none;
+                transition: all 0.3s ease;
+                padding: 5px 12px;
+                border-radius: 6px;
+            }
+            
+            .footer a:hover {
+                color: var (--lavender);
+                background-color: rgba(180, 190, 254, 0.1);
+                transform: translateY(-2px);
+            }
+            
+            .footer-copyright {
+                font-size: 14px;
+                margin-top: 15px;
+            }
+            
+            @media (max-width: 768px) {
+                .content-grid {
+                    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                    gap: 20px;
+                    padding: 0 15px;
+                }
+                
+                .content {
+                    padding: 20px;
+                }
+                
+                .ascii-header {
+                    font-size: 8px;
+                    margin: 10px;
+                }
+            }
+            
+            @media (max-width: 480px) {
+                .content-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+            
+            .pulse {
+                animation: pulse 2s infinite;
+            }
+            
+            @keyframes pulse {
+                0% { opacity: 0.8; }
+                50% { opacity: 1; }
+                100% { opacity: 0.8; }
             }
         </style>
     </head>
     <body>
-        <div class="ascii-header-parent">
-            <pre class="ascii-header">
+        <div class="main-container">
+            <div class="ascii-header-parent">
+                <pre class="ascii-header">
       :::::::::: :::       :::    ::: :::::::::: :::::::::: :::::::::: :::::::::: ::::::::::: ::::::::  :::    ::: :::::::::: ::::::::: 
      :+:        :+:       :+:    :+: :+:        :+:        :+:        :+:            :+:    :+:    :+: :+:    :+: :+:        :+:    :+: 
-    +:+        +:+       +:+    +:+ +:+        +:+        +:+        +:+            +:+    +:+        +:+    +:+ +:+        +:+    +:+  
+    +:+        +:+       +:+    +:+ +:+        +:+        +:+        +:+            +:+    +:+    +:+ +:+    +:+ +:+        +:+    +:+  
    :#::+::#   +#+       +#+    +:+ :#::+::#   :#::+::#   :#::+::#   +#++:++#       +#+    +#+        +#++:++#++ +#++:++#   +#++:++#:    
   +#+        +#+       +#+    +#+ +#+        +#+        +#+        +#+            +#+    +#+        +#+    +#+ +#+        +#+    +#+    
  #+#        #+#       #+#    #+# #+#        #+#        #+#        #+#            #+#    #+#    #+# #+#    #+# #+#        #+#    #+#     
 ###        ########## ########  ###        ###        ###        ##########     ###     ########  ###    ### ########## ###    ###      
 </pre>
-        </div>
-        <div class="content">
-            <p>Fluff-Fetch is an image api for anime images.</p>
-            <div class="status-box">
-                <div class="status-item">
-                    <span class="status-label">Status:</span>
-                    <span class="status-value" id="api-status">Loading...</span>
+            </div>
+            
+            <div class="content-grid">
+                <div class="content">
+                    <h2>Multi-Function API</h2>
+                    <p>Fluff-Fetcher provides easy access to images, GIFs, and text content</p>
+                    <div class="status-box">
+                        <div class="status-item">
+                            <span class="status-label">Status:</span>
+                            <span class="status-value" id="api-status">Loading...</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Version:</span>
+                            <span class="status-value" id="api-version">Loading...</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Uptime:</span>
+                            <span class="status-value" id="api-uptime">Loading...</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Server Time:</span>
+                            <span class="status-value" id="api-server-time">Loading...</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Server Load:</span>
+                            <span class="status-value" id="api-server-load">Loading...</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Memory Usage:</span>
+                            <span class="status-value" id="api-memory-usage">Loading...</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Served files:</span>
+                            <span class="status-value" id="api-served-files">Loading...</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="status-item">
-                    <span class="status-label">Version:</span>
-                    <span class="status-value" id="api-version">Loading...</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Uptime:</span>
-                    <span class="status-value" id="api-uptime">Loading...</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Server Time:</span>
-                    <span class="status-value" id="api-server-time">Loading...</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Server Load:</span>
-                    <span class="status-value" id="api-server-load">Loading...</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Memory Usage:</span>
-                    <span class="status-value" id="api-memory-usage">Loading...</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Served files since boot:</span>
-                    <span class="status-value" id="api-served-files">Loading...</span>
+                
+                <div class="content">
+                    <h2>Available Endpoints</h2>
+                    <p>Use these API endpoints in your applications</p>
+                    <div class="status-box">
+                        <div class="status-item">
+                            <span class="status-label">/api/sfw</span>
+                            <span class="status-value" id="api-sfw-paths">/gifs, /images</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">/api/text</span>
+                            <span class="status-value" id="api-text-paths">/jokes, /truthordare, /wouldyourather</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="https://github.com/catpawzz/fluff-fetcher" target="_blank">GitHub</a>
+                    <a href="/documentation" target="_blank">API Documentation</a>
+                    <a href="/status" target="_blank">Status Dashboard</a>
+                </div>
+                <div class="footer-copyright">
+                    &copy; <span id="current-year"></span> @catpawzz and @Snupai
+                </div>
+            </div>
+        </footer>
+
         <script>
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
             async function fetchStatus() {
                 try {
                     const response = await fetch('https://api.cat-space.net/api/status');
@@ -141,19 +325,28 @@
                     document.getElementById('api-server-load').textContent = data.server_load;
                     document.getElementById('api-memory-usage').textContent = data.memory_usage;
                     document.getElementById('api-served-files').textContent = data.served_files;
+                    
+                    const statusElement = document.getElementById('api-status');
+                    if (data.status === 'running') {
+                        statusElement.style.color = '#a6e3a1';
+                    } else {
+                        statusElement.style.color = '#f38ba8';
+                    }
+                    
                 } catch (error) {
-                    console.error('Error fetching status:', error);
-                    document.getElementById('api-status').textContent = 'Error loading status';
-                    document.getElementById('api-version').textContent = 'Error loading version';
-                    document.getElementById('api-uptime').textContent = 'Error loading uptime';
-                    document.getElementById('api-server-time').textContent = 'Error loading server time';
-                    document.getElementById('api-server-load').textContent = 'Error loading server load';
-                    document.getElementById('api-memory-usage').textContent = 'Error loading memory usage';
-                    document.getElementById('api-served-files').textContent = 'Error loading served files';
+                    const errorMessage = 'Connection failed';
+                    document.getElementById('api-status').textContent = errorMessage;
+                    document.getElementById('api-version').textContent = errorMessage;
+                    document.getElementById('api-uptime').textContent = errorMessage;
+                    document.getElementById('api-server-time').textContent = errorMessage;
+                    document.getElementById('api-server-load').textContent = errorMessage;
+                    document.getElementById('api-memory-usage').textContent = errorMessage;
+                    document.getElementById('api-served-files').textContent = errorMessage;
+                    
+                    document.getElementById('api-status').style.color = '#f38ba8';
                 }
             }
 
-            // Fetch status immediately and then every 30 seconds
             fetchStatus();
             setInterval(fetchStatus, 30000);
         </script>
