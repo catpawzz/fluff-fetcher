@@ -14,6 +14,7 @@ import (
 	jokes_handler "github.com/catpawzz/fluff-fetcher/handlers/text/jokes"
 	truthordare_handler "github.com/catpawzz/fluff-fetcher/handlers/text/truthordare"
 	wouldyourather_handler "github.com/catpawzz/fluff-fetcher/handlers/text/wouldyourather"
+	question_handler "github.com/catpawzz/fluff-fetcher/handlers/text/questions"
 	"github.com/catpawzz/fluff-fetcher/utils"
 	"github.com/joho/godotenv"
 	"github.com/shirou/gopsutil/load"
@@ -163,6 +164,14 @@ func main() {
 	})
 	http.HandleFunc("/api/text/jokes", func(w http.ResponseWriter, r *http.Request) {
 		jokes_handler.JokesHandler(w, r)
+		IncrementServedCounter()
+	})
+	http.HandleFunc("/api/text/questions/", func(w http.ResponseWriter, r *http.Request) {
+		question_handler.QuestionHandler(w, r)
+		IncrementServedCounter()
+	})
+	http.HandleFunc("/api/text/questions", func(w http.ResponseWriter, r *http.Request) {
+		question_handler.QuestionHandler(w, r)
 		IncrementServedCounter()
 	})
 	http.HandleFunc("/cdn/", cdnHandler)
