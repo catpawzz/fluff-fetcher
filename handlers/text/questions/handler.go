@@ -197,5 +197,5 @@ func QuestionHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, `{"handler": "/handlers/text/gettoknow","question": "%s", "status": "success"}`, question)
+	fmt.Fprintf(w, `{"handler": "/handlers/text/questions","question": "%s", "status": "success"}`, question)
 }
