@@ -1,4 +1,4 @@
-package text
+package question_handler
 
 import (
 	"fmt"
@@ -192,7 +192,7 @@ func getRandomGetToKnowQuestion() string {
 	return getToKnowQuestions[rand.Intn(len(getToKnowQuestions))]
 }
 
-func GetToKnowHandler(w http.ResponseWriter, r *http.Request) {
+func QuestionHandler(w http.ResponseWriter, r *http.Request) {
 	question := getRandomGetToKnowQuestion()
 
 	w.Header().Set("Content-Type", "application/json")
